@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
 import { useLogin } from './useLogin'
+import { PageLoader } from '@/shared/components/PageLoader'
 
 export const AppLoader = ({ children }: { children: ReactNode }) => {
   const { mutate, isPending, isError } = useLogin()
@@ -19,7 +20,7 @@ export const AppLoader = ({ children }: { children: ReactNode }) => {
     )
   }, [])
 
-  if (isPending) return <h1>Loading...</h1>
+  if (isPending) return <PageLoader />
   if (isError) return <h1>Ошибка</h1>
 
   return children
