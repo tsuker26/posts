@@ -24,6 +24,7 @@ export const EditProfile = ({ user }: EditProfilePropsType) => {
       },
     })
   }
+
   return (
     <Dialog open={checkIsOpen('editProfile')} onOpenChange={closeModal}>
       <DialogContent className='sm:max-w-[425px] max-h-[95vh] '>

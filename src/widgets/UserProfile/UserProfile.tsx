@@ -1,4 +1,5 @@
 import { User, useProfile } from '@/entities/User'
+import { EditAvatar } from '@/features/EditAvatar'
 import { EditProfile } from '@/features/EditProfile'
 import { useModal } from '@/shared/context/modalContext'
 
@@ -26,6 +27,7 @@ export const UserProfile = () => {
         onEditProfile={handleOpenEditProfile}
       />
       <EditProfile user={data} />
+      <EditAvatar />
     </>
   )
 }
