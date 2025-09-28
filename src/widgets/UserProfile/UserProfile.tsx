@@ -1,13 +1,14 @@
 import { User, useProfile } from '@/entities/User'
+import { useModal } from '@/shared/context/modalContext'
 
-type PropsType = {}
+export const UserProfile = () => {
+  const { data, isLoading } = useProfile()
 
-export const UserProfile = ({}: PropsType) => {
-  const { data, isLoading, error } = useProfile()
-
-  console.log('profile', data)
+  const { openModal } = useModal()
 
   if (!data) return null
 
-  return <User user={data} isLoading={isLoading} onEditAvatar={() => {}} onEditProfile={() => {}} />
+  return (
+    <User user={data} isLoading={isLoading} onEditAvatar={openModal} onEditProfile={openModal} />
+  )
 }

@@ -17,8 +17,8 @@ export const UserAvatar = ({
   onEditAvatar,
 }: UserAvatarPropsType) => {
   return (
-    <div className={cn('relative w-20 h-20 cursor-pointer group', className)}>
-      <Avatar className='w-20 h-20 relative overflow-hidden rounded-full'>
+    <div className={cn('relative w-25 h-25 cursor-pointer group', className)}>
+      <Avatar className='w-25 h-25 relative overflow-hidden rounded-full'>
         <AvatarImage src={`${baseURL}/${avatarUrl}`} />
         <AvatarFallback>{fallbackText}</AvatarFallback>
         {onEditAvatar && (

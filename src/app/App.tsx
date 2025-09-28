@@ -1,12 +1,15 @@
 import { ProfilePage } from '@/pages'
 import { QueryProvider } from './providers/QueryProvider/QueryProvider'
 import { AppLoader } from './providers/AppLoader/AppLoader'
+import { ModalProvider } from './providers/ModalProvider/ModalProvider'
 
 function App() {
   return (
     <QueryProvider>
       <AppLoader>
-        <ProfilePage />
+        <ModalProvider>
+          <ProfilePage />
+        </ModalProvider>
       </AppLoader>
     </QueryProvider>
   )
