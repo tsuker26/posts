@@ -1,4 +1,5 @@
 import { User, useProfile } from '@/entities/User'
+import { EditProfile } from '@/features/EditProfile'
 import { useModal } from '@/shared/context/modalContext'
 
 export const UserProfile = () => {
@@ -9,6 +10,9 @@ export const UserProfile = () => {
   if (!data) return null
 
   return (
-    <User user={data} isLoading={isLoading} onEditAvatar={openModal} onEditProfile={openModal} />
+    <>
+      <User user={data} isLoading={isLoading} onEditAvatar={openModal} onEditProfile={openModal} />
+      <EditProfile user={data} />
+    </>
   )
 }
