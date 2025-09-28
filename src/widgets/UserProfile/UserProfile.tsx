@@ -7,11 +7,24 @@ export const UserProfile = () => {
 
   const { openModal } = useModal()
 
+  const handleOpenEditAvatar = () => {
+    openModal('editAvatar')
+  }
+
+  const handleOpenEditProfile = () => {
+    openModal('editProfile')
+  }
+
   if (!data) return null
 
   return (
     <>
-      <User user={data} isLoading={isLoading} onEditAvatar={openModal} onEditProfile={openModal} />
+      <User
+        user={data}
+        isLoading={isLoading}
+        onEditAvatar={handleOpenEditAvatar}
+        onEditProfile={handleOpenEditProfile}
+      />
       <EditProfile user={data} />
     </>
   )

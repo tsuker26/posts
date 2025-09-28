@@ -7,17 +7,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog'
-import { EditProfileForm, type ProfileFormData } from './EditProfileForm'
+import { EditProfileForm, type EditProfileDTO } from './EditProfileForm'
 import { useUpdateProfile } from '../api'
 
 type EditProfilePropsType = {
   user: UserType
 }
 export const EditProfile = ({ user }: EditProfilePropsType) => {
-  const { isOpen, closeModal } = useModal()
+  const { checkIsOpen, closeModal } = useModal()
   const { mutate, isPending } = useUpdateProfile()
 
-  const handleSubmit = (data: ProfileFormData) => {
+  const handleSubmit = (data: EditProfileDTO) => {
     mutate(data, {
       onSuccess: () => {
         closeModal()
@@ -25,7 +25,7 @@ export const EditProfile = ({ user }: EditProfilePropsType) => {
     })
   }
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal}>
+    <Dialog open={checkIsOpen('editProfile')} onOpenChange={closeModal}>
       <DialogContent className='sm:max-w-[425px] max-h-[95vh] '>
         <DialogHeader>
           <DialogTitle>Редактировать профиль</DialogTitle>

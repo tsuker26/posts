@@ -17,12 +17,12 @@ const profileSchema = z.object({
   phone: z.string().min(5, 'Телефон слишком короткий').optional(),
 })
 
-export type ProfileFormData = z.infer<typeof profileSchema>
+export type EditProfileDTO = z.infer<typeof profileSchema>
 
 type EditProfileFormProps = {
   user: UserType
   isLoading: boolean
-  onSubmit: (data: ProfileFormData) => void
+  onSubmit: (data: EditProfileDTO) => void
   onCancel: () => void
 }
 
@@ -31,7 +31,7 @@ export const EditProfileForm = ({ user, isLoading, onSubmit, onCancel }: EditPro
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<ProfileFormData>({
+  } = useForm<EditProfileDTO>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       firstName: user.firstName || '',
