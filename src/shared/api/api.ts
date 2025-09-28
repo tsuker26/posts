@@ -1,7 +1,9 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios'
 
+export const baseURL = 'http://localhost:3000'
+
 export const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL,
   withCredentials: true,
 })
 
@@ -32,7 +34,6 @@ api.interceptors.response.use(
 
         return api(originalRequest)
       } catch (err) {
-        localStorage.removeItem('access_token')
         return Promise.reject(err)
       }
     }
