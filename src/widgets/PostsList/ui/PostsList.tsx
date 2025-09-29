@@ -5,9 +5,11 @@ import { useModal } from '@/shared/context/modalContext'
 import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader'
 import { useInView } from 'react-intersection-observer'
+import { SelectSort } from './SelectSort'
 
 export const PostsList = () => {
   const [postId, setPostId] = useState<number | null>(null)
+  const [sort, setSort] = useState<'ASC' | 'DESC'>('DESC')
   const { openModal } = useModal()
 
   const {
@@ -19,7 +21,7 @@ export const PostsList = () => {
     hasNoPosts,
   } = useMyPosts({
     limit: 5,
-    sort: 'DESC',
+    sort,
   })
 
   const handleChangePage = (inView: boolean) => {
@@ -37,6 +39,9 @@ export const PostsList = () => {
     openModal('editPost')
     setPostId(id)
   }
+  const handleSortChange = (value: 'ASC' | 'DESC') => {
+    setSort(value)
+  }
 
   const { ref } = useInView({
     threshold: 1,
@@ -48,6 +53,7 @@ export const PostsList = () => {
 
   return (
     <div className='flex flex-col'>
+      <SelectSort sort={sort} onChangeSort={handleSortChange} />
       {posts?.pages.map((page) =>
         page.map((post: PostType) => (
           <PostCard
