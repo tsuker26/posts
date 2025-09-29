@@ -17,11 +17,11 @@ type UserAvatarRenderProps = {
 type PostCardProps = {
   post: PostType
   userAvatarRender: (props: UserAvatarRenderProps) => ReactNode
-  onEdit: () => void
-  onDelete: () => void
+  onEdit: (id: number) => void
+  onRemove: (id: number) => void
 }
 
-export const PostCard = ({ post, userAvatarRender, onEdit, onDelete }: PostCardProps) => {
+export const PostCard = ({ post, userAvatarRender, onEdit, onRemove }: PostCardProps) => {
   const singleImage = post.images && post.images.length === 1
   const authorName = `${post.author.firstName} ${post.author.lastName}`
   const fallbackText = `${post.author.firstName?.at(0)}${post.author.lastName?.at(0)}`
@@ -33,7 +33,7 @@ export const PostCard = ({ post, userAvatarRender, onEdit, onDelete }: PostCardP
           {userAvatarRender({ fallbackText, avatarUrl: post.author.avatar, size: 10 })}
           <p className='font-semibold'>{authorName}</p>
         </div>
-        <PostActions onEdit={onEdit} onDelete={onDelete} />
+        <PostActions onEdit={() => onEdit(post.id)} onRemove={() => onRemove(post.id)} />
       </div>
 
       {post.images && post.images.length > 0 && (

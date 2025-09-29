@@ -1,6 +1,12 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
-export type ModalType = 'editProfile' | 'editAvatar' | 'createPost' | null
+export type ModalType =
+  | 'editProfile'
+  | 'editAvatar'
+  | 'createPost'
+  | 'editPost'
+  | 'removePost'
+  | null
 
 type ModalContextProps = {
   type: ModalType

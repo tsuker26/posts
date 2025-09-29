@@ -9,9 +9,9 @@ import { Edit, MoreHorizontal, Trash } from 'lucide-react'
 
 type PostActionsProps = {
   onEdit: () => void
-  onDelete: () => void
+  onRemove: () => void
 }
-export const PostActions = ({ onEdit, onDelete }: PostActionsProps) => {
+export const PostActions = ({ onEdit, onRemove }: PostActionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -24,7 +24,7 @@ export const PostActions = ({ onEdit, onDelete }: PostActionsProps) => {
           <Edit />
           Редактировать
         </DropdownMenuItem>
-        <DropdownMenuItem className='text-red-600 focus:text-red-600' onClick={onDelete}>
+        <DropdownMenuItem className='text-red-600 focus:text-red-600' onClick={onRemove}>
           <Trash />
           Удалить
         </DropdownMenuItem>
