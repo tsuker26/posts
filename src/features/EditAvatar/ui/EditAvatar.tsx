@@ -42,15 +42,7 @@ export const EditAvatar = () => {
   }
 
   const handleRemove = (url: string) => {
-    const filename = url.split('/').pop()!
-    deleteFile(
-      { filename, folder: 'avatar' },
-      {
-        onSuccess: () => {
-          setUrls((prev) => prev.filter((u) => u !== url))
-        },
-      }
-    )
+    setUrls((prev) => prev.filter((u) => u !== url))
   }
 
   return (

@@ -1,12 +1,12 @@
+import { useUploadFile } from '@/shared/api/uploadToStorage'
+import { DropzoneUploader } from '@/shared/components/DropZone'
+import { Button } from '@/shared/ui/button'
+import { Label } from '@/shared/ui/label'
+import { Textarea } from '@/shared/ui/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Textarea } from '@/shared/ui/textarea'
-import { Label } from '@/shared/ui/label'
-import { Button } from '@/shared/ui/button'
-import { DropzoneUploader } from '@/shared/components/DropZone'
-import { useDeleteFile, useUploadFile } from '@/shared/api/uploadToStorage'
 
 const postSchema = z.object({
   text: z.string().min(1, 'Текст обязателен'),
@@ -26,7 +26,6 @@ export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFor
   const [urls, setUrls] = useState<string[]>(initialData ? (initialData?.images ?? []) : [])
 
   const { mutate: uploadFile } = useUploadFile()
-  const { mutate: deleteFile } = useDeleteFile()
 
   const {
     register,
@@ -56,19 +55,11 @@ export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFor
   }
 
   const handleRemove = (url: string) => {
-    const filename = url.split('/').pop()!
-    deleteFile(
-      { filename, folder: 'posts' },
-      {
-        onSuccess: () => {
-          const { images } = getValues()
-          const newValues = images?.filter((imageUrl) => imageUrl !== url)
+    const { images } = getValues()
+    const newValues = images?.filter((imageUrl) => imageUrl !== url)
 
-          setUrls((prev) => prev.filter((u) => u !== url))
-          setValue('images', newValues, { shouldDirty: true })
-        },
-      }
-    )
+    setUrls((prev) => prev.filter((u) => u !== url))
+    setValue('images', newValues, { shouldDirty: true })
   }
 
   return (
