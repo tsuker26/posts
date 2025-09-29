@@ -1,7 +1,8 @@
 import { Card } from '@/shared/ui/card'
+import { Button } from '@/shared/ui/button'
 import type { UserType } from '../api'
 import { UserAvatar } from './UserAvatar'
-import { Button } from '@/shared/ui/button'
+import { UserSkeleton } from './UserSkeleton'
 
 type UserPropsType = {
   user: UserType
@@ -13,7 +14,7 @@ type UserPropsType = {
 export const User = ({ user, isLoading, onEditAvatar, onEditProfile }: UserPropsType) => {
   const avatarFallbackText = `${user.firstName?.at(0)}${user.lastName?.at(0)}`
 
-  if (isLoading) return null
+  if (isLoading) return <UserSkeleton />
 
   return (
     <Card className='p-5 flex gap-5'>

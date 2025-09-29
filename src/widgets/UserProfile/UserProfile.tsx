@@ -4,7 +4,7 @@ import { EditProfile } from '@/features/EditProfile'
 import { useModal } from '@/shared/context/modalContext'
 
 export const UserProfile = () => {
-  const { data, isLoading } = useProfile()
+  const { data, isFetching } = useProfile()
 
   const { openModal } = useModal()
 
@@ -22,7 +22,7 @@ export const UserProfile = () => {
     <>
       <User
         user={data}
-        isLoading={isLoading}
+        isLoading={isFetching}
         onEditAvatar={handleOpenEditAvatar}
         onEditProfile={handleOpenEditProfile}
       />

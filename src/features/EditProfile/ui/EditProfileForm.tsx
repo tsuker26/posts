@@ -6,7 +6,6 @@ import { Textarea } from '@/shared/ui/textarea'
 import { Label } from '@/shared/ui/label'
 import { Button } from '@/shared/ui/button'
 import type { UserType } from '@/entities/User'
-import { Loader } from '@/shared/ui/loader'
 
 const profileSchema = z.object({
   firstName: z.string().min(1, 'Имя обязательно'),
