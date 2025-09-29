@@ -49,7 +49,7 @@ export const DropzoneUploader = ({
       {previewUrl ? (
         <img src={previewUrl} alt='Preview' className='w-40 h-40 object-cover rounded-full' />
       ) : (
-        <p className='text-white text-center'>Перетащите файл сюда или кликните для выбора</p>
+        <p className='text-center'>Перетащите файл сюда или кликните для выбора</p>
       )}
       {children}
     </div>

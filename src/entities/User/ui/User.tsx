@@ -28,9 +28,9 @@ export const User = ({ user, isLoading, onEditAvatar, onEditProfile }: UserProps
             <h2 className='text-xl font-bold'>
               {user?.firstName} {user?.lastName}
             </h2>
-            <p>Email: {user?.email}</p>
-            <p>Телефон: {user?.phone}</p>
-            <p>Дата рождения: {user?.birthDate}</p>
+            {user?.email && <p>Email: {user?.email}</p>}
+            {user?.phone && <p>Телефон: {user?.phone}</p>}
+            {user?.birthDate && <p>Дата рождения: {user?.birthDate}</p>}
           </div>
         </div>
         <Button variant='outline' onClick={onEditProfile}>
@@ -38,7 +38,7 @@ export const User = ({ user, isLoading, onEditAvatar, onEditProfile }: UserProps
         </Button>
       </div>
       <div className='w-full ml-3'>
-        <p>O себе: {user?.about}</p>
+        {user?.about ? <p>O себе: {user?.about}</p> : 'Укажите информацию о себе'}
       </div>
     </Card>
   )

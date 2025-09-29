@@ -13,8 +13,18 @@ const profileSchema = z.object({
   lastName: z.string().min(1, 'Фамилия обязательна'),
   birthDate: z.string().optional(),
   about: z.string().max(300, 'Максимум 300 символов').optional(),
-  email: z.string().email('Некорректный email'),
-  phone: z.string().min(5, 'Телефон слишком короткий').optional(),
+  email: z
+    .string()
+    .optional()
+    .refine((val) => !val || z.email().safeParse(val).success, {
+      message: 'Некорректный email',
+    }),
+  phone: z
+    .string()
+    .optional()
+    .refine((val) => !val || val.length >= 5, {
+      message: 'Телефон слишком короткий',
+    }),
 })
 
 export type EditProfileDTO = z.infer<typeof profileSchema>
@@ -30,7 +40,7 @@ export const EditProfileForm = ({ user, isLoading, onSubmit, onCancel }: EditPro
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors, isDirty },
   } = useForm<EditProfileDTO>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -77,7 +87,7 @@ export const EditProfileForm = ({ user, isLoading, onSubmit, onCancel }: EditPro
 
         <div className='grid gap-2 relative'>
           <Label htmlFor='email'>Email</Label>
-          <Input id='email' type='email' {...register('email')} />
+          <Input id='email' {...register('email')} />
           {errors.email && (
             <p className='text-sm text-red-500 absolute top-14'>{errors.email.message}</p>
           )}
@@ -96,7 +106,7 @@ export const EditProfileForm = ({ user, isLoading, onSubmit, onCancel }: EditPro
         <Button variant='outline' type='button' onClick={onCancel}>
           Отмена
         </Button>
-        <Button className='w-30' type='submit' disabled={isSubmitting}>
+        <Button className='w-30' type='submit' disabled={!isDirty}>
           {isLoading ? <Loader /> : 'Сохранить'}
         </Button>
       </div>
