@@ -15,18 +15,18 @@ export const EditAvatar = () => {
   const { checkIsOpen, closeModal } = useModal()
   const { mutate: uploadAvatar, isPending } = useUploadAvatar()
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
 
   const handleUpload = () => {
     if (selectedFile) {
-      uploadAvatar(selectedFile, {
+      uploadAvatar(selectedFile[0], {
         onSuccess: () => closeModal(),
       })
     }
   }
 
-  const handleFileSelected = (file: File) => {
-    setSelectedFile(file)
+  const handleFileSelected = (files: File[]) => {
+    setSelectedFile(files)
   }
 
   return (
@@ -39,7 +39,7 @@ export const EditAvatar = () => {
         <DropzoneUploader
           accept={{ 'image/*': [] }}
           multiple={false}
-          onFileSelected={handleFileSelected}
+          onFilesSelected={handleFileSelected}
           className='mt-4'
         />
 

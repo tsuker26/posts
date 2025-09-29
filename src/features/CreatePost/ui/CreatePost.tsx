@@ -8,10 +8,18 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog'
 import { Plus } from 'lucide-react'
+import { PostForm, type PostFormData } from './PostForm'
+import { useCreatePost } from '../api'
 
 export const CreatePost = () => {
   const { checkIsOpen, openModal, closeModal } = useModal()
 
+  const { mutateAsync: createPost, isPending } = useCreatePost()
+
+  const handleSubmit = async (data: PostFormData) => {
+    await createPost(data)
+    closeModal()
+  }
   const handleOpenModal = () => {
     openModal('createPost')
   }
@@ -29,7 +37,8 @@ export const CreatePost = () => {
           <DialogHeader>
             <DialogTitle>Создать пост</DialogTitle>
           </DialogHeader>
-          <DialogDescription></DialogDescription>
+          <DialogDescription>Напишите текст и добавьте изображения</DialogDescription>
+          <PostForm isLoading={isPending} onSubmit={handleSubmit} onCancel={closeModal} />
         </DialogContent>
       </Dialog>
     </div>
