@@ -7,6 +7,7 @@ type UserAvatarPropsType = {
   avatarUrl?: string
   fallbackText: string
   className?: string
+  size?: number
   onEditAvatar?: () => void
 }
 
@@ -14,14 +15,15 @@ export const UserAvatar = ({
   fallbackText,
   avatarUrl,
   className,
+  size = 25,
   onEditAvatar,
 }: UserAvatarPropsType) => {
   return (
     <div
       onClick={onEditAvatar}
-      className={cn('relative w-25 h-25 cursor-pointer group', className)}
+      className={cn(`relative size-${size}cursor-pointer group`, className)}
     >
-      <Avatar className='w-25 h-25 relative overflow-hidden rounded-full'>
+      <Avatar className={`size-${size} relative overflow-hidden rounded-full`}>
         <AvatarImage src={`${baseURL}/${avatarUrl}`} />
         <AvatarFallback>{fallbackText}</AvatarFallback>
         {onEditAvatar && (
