@@ -23,15 +23,14 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
       try {
-        const res = await api.get('/auth/refresh')
-        const newAccessToken = res.data.accessToken
+        const res = await api.post('/auth/refresh')
+        const newAccessToken = res.data.access_token
 
         localStorage.setItem('access_token', newAccessToken)
 
         if (originalRequest.headers) {
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
         }
-
         return api(originalRequest)
       } catch (err) {
         return Promise.reject(err)
