@@ -6,10 +6,11 @@ import { Textarea } from '@/shared/ui/textarea'
 import { Label } from '@/shared/ui/label'
 import { Button } from '@/shared/ui/button'
 import { DropzoneUploader } from '@/shared/components/DropZone'
+import { useDeleteFile, useUploadFile } from '@/shared/api/uploadToStorage'
 
 const postSchema = z.object({
   text: z.string().min(1, 'Текст обязателен'),
-  images: z.array(z.instanceof(File)).optional(),
+  images: z.array(z.string()).optional(),
 })
 
 export type PostFormData = z.infer<typeof postSchema>
@@ -22,11 +23,16 @@ type PostFormProps = {
 }
 
 export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFormProps) => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+  const [urls, setUrls] = useState<string[]>([])
+
+  const { mutate: uploadFile } = useUploadFile()
+  const { mutate: deleteFile } = useDeleteFile()
+
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors, isDirty },
   } = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
@@ -35,9 +41,34 @@ export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFor
       images: [],
     },
   })
+
   const handleFilesSelected = (files: File[]) => {
-    setValue('images', files)
-    setSelectedFiles(files)
+    uploadFile(
+      { files, folder: 'posts' },
+      {
+        onSuccess: (data) => {
+          const newUrls = data.map((d) => d.url)
+          setUrls((prev) => [...prev, ...newUrls])
+          setValue('images', [...urls, ...newUrls])
+        },
+      }
+    )
+  }
+
+  const handleRemove = (url: string) => {
+    const filename = url.split('/').pop()!
+    deleteFile(
+      { filename, folder: 'posts' },
+      {
+        onSuccess: () => {
+          const { images } = getValues()
+          const newValues = images?.filter((imageUrl) => imageUrl !== url)
+
+          setUrls((prev) => prev.filter((u) => u !== url))
+          setValue('images', newValues)
+        },
+      }
+    )
   }
 
   return (
@@ -54,10 +85,10 @@ export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFor
       </div>
 
       <DropzoneUploader
-        files={selectedFiles}
-        multiple
+        urls={urls}
         onFilesSelected={handleFilesSelected}
-        className='mt-4'
+        onRemove={handleRemove}
+        multiple
       />
 
       <div className='mt-4 flex gap-3 justify-end border-t pt-4 shrink-0 bg-background'>

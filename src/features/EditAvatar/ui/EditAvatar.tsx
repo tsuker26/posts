@@ -10,23 +10,47 @@ import {
 } from '@/shared/ui/dialog'
 import { useUploadAvatar } from '../api'
 import { useState } from 'react'
+import { useDeleteFile, useUploadFile } from '@/shared/api/uploadToStorage'
 
 export const EditAvatar = () => {
   const { checkIsOpen, closeModal } = useModal()
   const { mutate: uploadAvatar, isPending } = useUploadAvatar()
+  const { mutate: uploadFile } = useUploadFile()
+  const { mutate: deleteFile } = useDeleteFile()
 
-  const [selectedFile, setSelectedFile] = useState<File[] | null>(null)
+  const [urls, setUrls] = useState<string[]>([])
 
   const handleUpload = () => {
-    if (selectedFile) {
-      uploadAvatar(selectedFile[0], {
-        onSuccess: () => closeModal(),
-      })
-    }
+    uploadAvatar(urls[0], {
+      onSuccess: () => closeModal(),
+    })
   }
 
-  const handleFileSelected = (files: File[]) => {
-    setSelectedFile(files)
+  const handleFilesSelected = (files: File[]) => {
+    uploadFile(
+      { files, folder: 'avatar' },
+      {
+        onSuccess: (data) => {
+          if (urls.length) {
+            const filename = urls[0].split('/').pop()!
+            deleteFile({ filename, folder: 'avatar' })
+          }
+          setUrls([data[0].url])
+        },
+      }
+    )
+  }
+
+  const handleRemove = (url: string) => {
+    const filename = url.split('/').pop()!
+    deleteFile(
+      { filename, folder: 'avatar' },
+      {
+        onSuccess: () => {
+          setUrls((prev) => prev.filter((u) => u !== url))
+        },
+      }
+    )
   }
 
   return (
@@ -37,9 +61,10 @@ export const EditAvatar = () => {
         </DialogHeader>
         <DialogDescription>Выберите файл или перетащите его сюда.</DialogDescription>
         <DropzoneUploader
-          accept={{ 'image/*': [] }}
+          urls={urls}
           multiple={false}
-          onFilesSelected={handleFileSelected}
+          onFilesSelected={handleFilesSelected}
+          onRemove={handleRemove}
           className='mt-4'
         />
 
@@ -50,7 +75,7 @@ export const EditAvatar = () => {
           <Button
             isLoading={isPending}
             onClick={handleUpload}
-            disabled={Boolean(!selectedFile) || isPending}
+            disabled={Boolean(!urls.length) || isPending}
           >
             Сохранить
           </Button>

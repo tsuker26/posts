@@ -1,61 +1,36 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { cn } from '../lib/utils'
 import { X } from 'lucide-react'
+import { baseURL } from '../api/api'
 
 type DropzoneUploaderProps = {
-  files?: File[]
-  accept?: Record<string, string[]>
+  urls: string[]
   multiple?: boolean
   onFilesSelected: (files: File[]) => void
+  onRemove: (url: string) => void
   className?: string
 }
 
 export const DropzoneUploader = ({
-  files,
-  accept = { 'image/*': [] },
+  urls,
   multiple = false,
   onFilesSelected,
+  onRemove,
   className,
 }: DropzoneUploaderProps) => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>(files || [])
-  const [previewUrls, setPreviewUrls] = useState<string[]>(
-    files ? files.map((file) => URL.createObjectURL(file)) : []
-  )
-
-  const updatePreviews = (files: File[]) => {
-    previewUrls.forEach((url) => URL.revokeObjectURL(url))
-    setPreviewUrls(files.map((file) => URL.createObjectURL(file)))
-  }
-
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const newFiles = multiple ? [...selectedFiles, ...acceptedFiles] : acceptedFiles
-      setSelectedFiles(newFiles)
-      updatePreviews(newFiles)
-      onFilesSelected(newFiles)
+      onFilesSelected(acceptedFiles)
     },
-    [selectedFiles, multiple, onFilesSelected]
+    [onFilesSelected]
   )
-
-  const removeFile = (index: number) => {
-    const newFiles = selectedFiles.filter((_, i) => i !== index)
-    setSelectedFiles(newFiles)
-    updatePreviews(newFiles)
-    onFilesSelected(newFiles)
-  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept,
+    accept: { 'image/*': [] },
     multiple,
   })
-
-  useEffect(() => {
-    return () => {
-      previewUrls.forEach((url) => URL.revokeObjectURL(url))
-    }
-  }, [previewUrls])
 
   return (
     <div
@@ -67,16 +42,20 @@ export const DropzoneUploader = ({
       )}
     >
       <input {...getInputProps()} />
-      {previewUrls.length > 0 ? (
+      {urls.length > 0 ? (
         <div className='flex flex-wrap gap-2'>
-          {previewUrls.map((url, i) => (
+          {urls.map((url, i) => (
             <div key={i} className='relative group'>
-              <img src={url} alt='Preview' className='w-20 h-20 object-cover rounded-lg' />
+              <img
+                src={`${baseURL}/${url}`}
+                alt='Preview'
+                className='w-20 h-20 object-cover rounded-lg'
+              />
               <button
                 type='button'
                 onClick={(e) => {
                   e.stopPropagation()
-                  removeFile(i)
+                  onRemove(url)
                 }}
                 className='absolute top-1 right-1 bg-black bg-opacity-50 rounded-full p-1 opacity-0 group-hover:opacity-100 transition'
               >

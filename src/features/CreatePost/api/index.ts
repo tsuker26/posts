@@ -3,7 +3,7 @@ import { api } from '@/shared/api/api'
 
 export interface CreatePostDTO {
   text: string
-  images?: File[]
+  images?: string[]
 }
 
 export interface UpdatePostDTO {
@@ -17,9 +17,7 @@ export const createPost = async (data: CreatePostDTO) => {
   formData.append('text', data.text)
   data.images?.forEach((file) => formData.append('images', file))
 
-  const response = await api.post('/posts', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const response = await api.post('/posts', data)
   return response.data
 }
 
