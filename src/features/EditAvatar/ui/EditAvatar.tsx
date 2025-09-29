@@ -25,6 +25,11 @@ export const EditAvatar = () => {
       })
     }
   }
+
+  const handleFileSelected = (file: File) => {
+    setSelectedFile(file)
+  }
+
   return (
     <Dialog open={checkIsOpen('editAvatar')} onOpenChange={closeModal}>
       <DialogContent className='sm:max-w-[425px] max-h-[95vh] '>
@@ -35,7 +40,7 @@ export const EditAvatar = () => {
         <DropzoneUploader
           accept={{ 'image/*': [] }}
           multiple={false}
-          onFileSelected={setSelectedFile}
+          onFileSelected={handleFileSelected}
           className='mt-4'
         />
 
@@ -43,7 +48,11 @@ export const EditAvatar = () => {
           <Button variant='outline' onClick={closeModal}>
             Отмена
           </Button>
-          <Button className='w-30' onClick={handleUpload} disabled={!selectedFile || isPending}>
+          <Button
+            className='w-30'
+            onClick={handleUpload}
+            disabled={Boolean(!selectedFile) || isPending}
+          >
             {isPending ? <Loader /> : 'Сохранить'}
           </Button>
         </div>
