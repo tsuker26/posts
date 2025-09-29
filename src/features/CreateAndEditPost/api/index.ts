@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/shared/api/api'
+import type { PostType } from '@/entities/Post'
 
 export interface CreatePostDTO {
   text: string
@@ -8,8 +9,8 @@ export interface CreatePostDTO {
 
 export interface UpdatePostDTO {
   id: number
-  text?: string
-  images?: File[]
+  text: string
+  images?: string[]
 }
 
 export const createPost = async (data: CreatePostDTO) => {
@@ -24,6 +25,11 @@ export const createPost = async (data: CreatePostDTO) => {
 export const updatePost = async (dto: UpdatePostDTO) => {
   const { id, ...post } = dto
   const response = await api.patch(`/posts/${id}`, post)
+  return response.data
+}
+
+export const getPostById = async (id: number): Promise<PostType> => {
+  const response = await api.get(`/posts/${id}`)
   return response.data
 }
 
@@ -50,5 +56,12 @@ export const useUpdatePost = () => {
     onError: (error) => {
       console.error('Ошибка при обновлении поста:', error)
     },
+  })
+}
+
+export const usePostById = (id: number) => {
+  return useQuery<PostType>({
+    queryKey: ['post', id],
+    queryFn: () => getPostById(id),
   })
 }

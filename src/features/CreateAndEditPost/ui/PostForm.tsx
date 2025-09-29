@@ -23,7 +23,7 @@ type PostFormProps = {
 }
 
 export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFormProps) => {
-  const [urls, setUrls] = useState<string[]>([])
+  const [urls, setUrls] = useState<string[]>(initialData ? (initialData?.images ?? []) : [])
 
   const { mutate: uploadFile } = useUploadFile()
   const { mutate: deleteFile } = useDeleteFile()
@@ -49,7 +49,7 @@ export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFor
         onSuccess: (data) => {
           const newUrls = data.map((d) => d.url)
           setUrls((prev) => [...prev, ...newUrls])
-          setValue('images', [...urls, ...newUrls])
+          setValue('images', [...urls, ...newUrls], { shouldDirty: true })
         },
       }
     )
@@ -65,7 +65,7 @@ export const PostForm = ({ initialData, isLoading, onSubmit, onCancel }: PostFor
           const newValues = images?.filter((imageUrl) => imageUrl !== url)
 
           setUrls((prev) => prev.filter((u) => u !== url))
-          setValue('images', newValues)
+          setValue('images', newValues, { shouldDirty: true })
         },
       }
     )

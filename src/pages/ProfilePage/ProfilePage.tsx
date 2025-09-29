@@ -1,4 +1,4 @@
-import { CreatePost } from '@/features/CreatePost'
+import { CreatePost } from '@/features/CreateAndEditPost'
 import { PostsList } from '@/widgets/PostsList'
 import { UserProfile } from '@/widgets/UserProfile'
 

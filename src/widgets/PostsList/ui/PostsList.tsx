@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Loader } from '@/shared/ui/loader'
 import { useInView } from 'react-intersection-observer'
 import { SelectSort } from './SelectSort'
+import { EditPost } from '@/features/CreateAndEditPost'
 
 export const PostsList = () => {
   const [postId, setPostId] = useState<number | null>(null)
@@ -73,6 +74,7 @@ export const PostsList = () => {
       )}
 
       {postId && <RemovePost postId={postId} />}
+      {postId && <EditPost postId={postId} />}
     </div>
   )
 }
