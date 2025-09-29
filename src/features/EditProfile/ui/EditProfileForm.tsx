@@ -106,8 +106,8 @@ export const EditProfileForm = ({ user, isLoading, onSubmit, onCancel }: EditPro
         <Button variant='outline' type='button' onClick={onCancel}>
           Отмена
         </Button>
-        <Button className='w-30' type='submit' disabled={!isDirty}>
-          {isLoading ? <Loader /> : 'Сохранить'}
+        <Button isLoading={isLoading} type='submit' disabled={!isDirty}>
+          Сохранить
         </Button>
       </div>
     </form>

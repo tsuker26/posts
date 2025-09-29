@@ -10,7 +10,6 @@ import {
 } from '@/shared/ui/dialog'
 import { useUploadAvatar } from '../api'
 import { useState } from 'react'
-import { Loader } from '@/shared/ui/loader'
 
 export const EditAvatar = () => {
   const { checkIsOpen, closeModal } = useModal()
@@ -49,11 +48,11 @@ export const EditAvatar = () => {
             Отмена
           </Button>
           <Button
-            className='w-30'
+            isLoading={isPending}
             onClick={handleUpload}
             disabled={Boolean(!selectedFile) || isPending}
           >
-            {isPending ? <Loader /> : 'Сохранить'}
+            Сохранить
           </Button>
         </div>
       </DialogContent>
