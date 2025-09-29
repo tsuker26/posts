@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/api'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 export type PostType = {
   id: number
@@ -32,12 +32,26 @@ export const getMyPosts = async (params?: GetMyPostsParams) => {
   if (params?.sort) query.append('sort', params.sort)
 
   const response = await api.get(`/posts/my?${query.toString()}`)
-  return response.data
+  return response.data as PostType[]
 }
 
-export const useMyPosts = (params?: { limit?: number; offset?: number; sort?: 'ASC' | 'DESC' }) => {
-  return useQuery<PostType[]>({
+export const useMyPosts = (params?: { limit?: number; sort?: 'ASC' | 'DESC' }) => {
+  const limit = params?.limit || 10
+
+  const result = useInfiniteQuery({
     queryKey: ['post', params],
-    queryFn: () => getMyPosts(params),
+    queryFn: ({ pageParam = 0 }) => getMyPosts({ limit, offset: pageParam, sort: params?.sort }),
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < limit) return undefined
+      return allPages.length * limit
+    },
+    initialPageParam: 0,
   })
+
+  const hasNoPosts = !result.isLoading && result.data?.pages.flat().length === 0
+
+  return {
+    ...result,
+    hasNoPosts,
+  }
 }

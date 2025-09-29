@@ -21,6 +21,7 @@ export const useUploadAvatar = () => {
     mutationFn: (file: File) => uploadAvatar(file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] })
+      queryClient.invalidateQueries({ queryKey: ['post'] })
     },
     onError: (error) => {
       console.error('Ошибка загрузки аватара:', error)

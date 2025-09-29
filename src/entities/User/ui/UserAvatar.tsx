@@ -21,11 +21,11 @@ export const UserAvatar = ({
   return (
     <div
       onClick={onEditAvatar}
-      className={cn(`relative size-${size}cursor-pointer group`, className)}
+      className={cn(`relative w-${size} h-${size} cursor-pointer group`, className)}
     >
-      <Avatar className={`size-${size} relative overflow-hidden rounded-full`}>
+      <Avatar className={`w-${size} h-${size} relative overflow-hidden rounded-full`}>
         <AvatarImage src={`${baseURL}/${avatarUrl}`} />
-        <AvatarFallback>{fallbackText}</AvatarFallback>
+        <AvatarFallback className={`w-${size} h-${size}`}>{fallbackText}</AvatarFallback>
         {onEditAvatar && (
           <div
             className='absolute bottom-0 left-0 w-full h-1/2 bg-gray-700  flex items-center justify-center 
