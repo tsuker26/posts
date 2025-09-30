@@ -3,6 +3,7 @@ import { Button } from '@/shared/ui/button'
 import type { UserType } from '../api'
 import { UserAvatar } from './UserAvatar'
 import { UserSkeleton } from './UserSkeleton'
+import { Pencil } from 'lucide-react'
 
 type UserPropsType = {
   user: UserType
@@ -47,16 +48,19 @@ export const User = ({ user, isLoading, onEditAvatar, onEditProfile }: UserProps
           </div>
         </div>
         <Button variant='outline' onClick={onEditProfile}>
-          Редактировать профиль
+          <Pencil className='w-4 h-4 sm:hidden' />
+          <span className='hidden sm:inline'>Редактировать профиль</span>
         </Button>
       </div>
-      <div className='w-full ml-3'>
+      <div className='w-full mt-3 sm:ml-3 sm:mt-0'>
         {user?.about ? (
-          <p>
-            <strong>O себе:</strong> {user?.about}
+          <p className='text-sm sm:text-base leading-relaxed'>
+            <strong>О себе:</strong> {user?.about}
           </p>
         ) : (
-          'Укажите информацию о себе'
+          <span className='text-gray-500 italic text-sm sm:text-base'>
+            Укажите информацию о себе
+          </span>
         )}
       </div>
     </Card>
